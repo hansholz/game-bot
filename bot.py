@@ -10,7 +10,7 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(content_types=['photo', 'text'])
 def send_flag(message: Message):
-    if 'test' in message.text:
+    if 'Next' in message.text:
         flag = random.choice(os.listdir("flags/"))
         photo = open('flags/'+flag, 'rb')
         bot.send_photo(message.chat.id, photo, 'What is country?')
