@@ -3,8 +3,10 @@ import os, random
 from telebot.types import Message
 import linecache
 
-with open('.secret', 'rb') as TOKEN:
-    bot = telebot.TeleBot(TOKEN)
+TOKEN = '1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k'
+
+
+bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(content_types=['photo', 'text'])
