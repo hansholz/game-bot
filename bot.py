@@ -3,7 +3,7 @@ import os, random
 from telebot.types import Message
 import linecache
 
-TOKEN = '1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k'
+with open('.secret', 'rb') as TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
