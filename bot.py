@@ -13,7 +13,7 @@ def send_flag(message: Message):
     if 'Test' in message.text:
         flag = random.choice(os.listdir("flags/"))
         photo = open('flags/'+flag, 'rb')
-        bot.send_photo(message.chat.id, photo, 'What country is this? Hehe')
+        bot.send_photo(message.chat.id, photo, 'What country is this? Hehehe')
         return flag
 
 
