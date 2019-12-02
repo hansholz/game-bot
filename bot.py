@@ -3,9 +3,7 @@ import os, random
 from telebot.types import Message
 import linecache
 
-with open('.secret', 'rb') as TOKEN:
-    bot = telebot.TeleBot(TOKEN)
-
+bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(content_types=['photo', 'text'])
 def send_flag(message: Message):
