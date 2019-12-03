@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    node {
+    stages {
         stage('Pull code'){
             git 'https://github.com/hansholz/game-bot.git'
         }
