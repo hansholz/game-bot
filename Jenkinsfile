@@ -35,4 +35,5 @@ post {
             slackNotifier(currentBuild.currentResult)
             cleanWs()
         }
+    }
 }
