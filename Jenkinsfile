@@ -29,6 +29,5 @@ node{
     stage('Post-Build'){
         slackNotifier(currentBuild.currentResult)
         cleanWs()
-        }
-    }
-}
+     }
+   }
