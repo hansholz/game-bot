@@ -30,7 +30,7 @@ node{
         }
 
         stage('Post-Build'){
-            slackNotifier(currentBuild.currentResult)
+            slackSend channel: 'humeniuk-ci-cd-notification', message: currentBuild.currentResult
             cleanWs()
         }
     }
