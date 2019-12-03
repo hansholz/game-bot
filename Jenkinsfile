@@ -31,7 +31,7 @@ node{
 
         stage('Post-Build actions'){
             /*Send notifications to Slack*/
-            slackSend channel: 'humeniuk-ci-cd-notification', message: 'Build number: '+currentBuild.number+' is 'currentBuild.currentResult
+            slackSend channel: 'humeniuk-ci-cd-notification', message: 'Build number: '+currentBuild.number+' is '+currentBuild.currentResult
 
             /*Clean Workspace*/
             cleanWs()
