@@ -1,6 +1,8 @@
 FROM python:3.6-alpine3.9
 
-COPY . ./
+WORKDIR /bot
+
+COPY . /bot
 
 RUN apk update && pip install -r requirements.txt
 
