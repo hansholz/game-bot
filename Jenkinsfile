@@ -27,3 +27,7 @@ node{
 
     }
 }
+    finally{
+        slackNotifier(currentBuild.currentResult)
+        cleanWs()
+    }
