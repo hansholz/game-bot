@@ -21,11 +21,13 @@ def send_flag(message: Message):
         return flag
 
 
+@bot.message_handler()
 def del_trash(flag):
         flagsiso = flag.replace(".png", "")
         return flagsiso
 
 
+@bot.message_handler()
 def line_num_for_phrase_in_file(flagsiso, filename='list-of-iso.txt'):
     with open(filename, 'r') as f:
         for (i, line) in enumerate(f):
@@ -33,6 +35,7 @@ def line_num_for_phrase_in_file(flagsiso, filename='list-of-iso.txt'):
                 return i, line
 
 
+@bot.message_handler()
 def search_name_of_country(i):
     name_country = linecache.getline('list-of-countries.txt', (i+1))
     return name_country
