@@ -11,47 +11,47 @@ TOKEN = '1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k'
 bot = telebot.TeleBot(TOKEN)
 conn = sqlite3.connect('example.db')
 
+answers = {}
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message: Message):
     # sending a picture of country
     flag = random.choice(os.listdir("flags/"))
+    answers[message.chat.id] = search_name_of_country(flag)
     photo = open('flags/'+flag, 'rb')
-    bot.send_photo(message.chat.id, photo, 'What country is this??')
-    return flag
+    photo = bot.send_photo(message.chat.id, photo, 'What country is this??')
+    bot.register_next_step_handler(photo, checking)
 
 
-@bot.message_handler()
 def del_trash(flag):
     # deleting a part of string with ".png"
-    flag = str(flag)
     flagsiso = flag.replace(".png", "")
     return flagsiso
 
 
-@bot.message_handler()
-def line_num_for_phrase_in_file(flagsiso, filename='list-of-iso.txt'):
+def line_num_for_phrase_in_file(flag, filename='list-of-iso.txt'):
     # returning a number of string with name of image this country
-        with open(filename, 'r') as f:
-            for (i, line) in enumerate(f):
-                if str(flagsiso.upper()) in line:
-                    return i, line
+    flagsiso = del_trash(flag)
+    with open(filename, 'r') as f:
+        for (i, line) in enumerate(f):
+            if str(flagsiso.upper()) in line:
+                return i, line
 
 
-@bot.message_handler()
-def search_name_of_country(i):
+def search_name_of_country(flag):
     # returning name of country by correlation numbers of strings
+    i, line = line_num_for_phrase_in_file(flag)
     name_country = linecache.getline('list-of-countries.txt', (i+1))
-    return name_country
+    return name_country.strip()
 
 
 @bot.message_handler(content_types=['text'])
-def checking(message, name_country):
-    bot.send_message(message, str(name_country))
+def checking(message):
+    bot.send_message(message.chat.id, f'{message.text} Message text')
+    bot.send_message(message.chat.id, f'{answers[message.chat.id]} Answers')
     # checking answer of user with correct name of country
-    if message.text == name_country:
-        print(name_country)
+    if message.text.strip() == answers[message.chat.id]:
         bot.reply_to(message, 'You are damn right!')
     else:
         bot.reply_to(message, 'Try again!')
