@@ -16,7 +16,7 @@ conn = sqlite3.connect('example.db')
 def send_welcome(message: Message):
         flag = random.choice(os.listdir("flags/"))
         photo = open('flags/'+flag, 'rb')
-        bot.send_photo(message.chat.id, photo, 'What country is this???')
+        bot.send_photo(message.chat.id, photo, 'What country is this??')
         return flag
 
 
