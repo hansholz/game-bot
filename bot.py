@@ -48,12 +48,14 @@ def search_name_of_country(flag):
 
 @bot.message_handler(content_types=['text'])
 def checking(message):
-    # checking answer of user with correct name of country
-    if message.text.strip() == answers[message.chat.id]:
-        bot.reply_to(message, f'You are damn right!, Its {answers[message.chat.id]} https://ru.wikipedia.org/wiki/{answers[message.chat.id]}')
+    if message.text == '/start':
+        send_welcome(message)
     else:
-        bot.reply_to(message, f'Try again! Its {answers[message.chat.id]} https://ua.wikipedia.org/wiki/{answers[message.chat.id]}')
-    return
+        if message.text.strip().lower() == answers[message.chat.id].lower():
+            bot.reply_to(message, f'You are damn right!, Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id]}')
+        else:
+            bot.reply_to(message, f'Try again! Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id]}')
+        return
 
 
 bot.polling()
