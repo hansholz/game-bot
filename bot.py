@@ -12,9 +12,8 @@ bot = telebot.TeleBot(TOKEN)
 conn = sqlite3.connect('example.db')
 
 
-@bot.message_handler(content_types=['photo', 'text'])
-def send_flag(message: Message):
-    if 'Test' in message.text:
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message: Message):
         flag = random.choice(os.listdir("flags/"))
         photo = open('flags/'+flag, 'rb')
         bot.send_photo(message.chat.id, photo, 'What country is this???')
