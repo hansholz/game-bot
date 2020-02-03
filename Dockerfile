@@ -8,4 +8,4 @@ RUN apk update && pip install -r requirements.txt
 
 ENTRYPOINT ["python"]
 
-CMD ["bot2.py"]
+CMD ["bot.py"]
