@@ -2,11 +2,14 @@ import telebot
 import os, random
 from telebot.types import Message
 import linecache
+import sqlite3
+
 
 TOKEN = '1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k'
 
 
 bot = telebot.TeleBot(TOKEN)
+conn = sqlite3.connect('example.db')
 
 
 @bot.message_handler(content_types=['photo', 'text'])
@@ -35,6 +38,7 @@ def search_name_of_country(i):
     return name_country
 
 
+@bot.message_handler()
 def checking(message, name_country):
     if message.text == name_country:
         print(name_country)
