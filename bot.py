@@ -48,8 +48,6 @@ def search_name_of_country(flag):
 
 @bot.message_handler(content_types=['text'])
 def checking(message):
-    bot.send_message(message.chat.id, f'{message.text} Message text')
-    bot.send_message(message.chat.id, f'{answers[message.chat.id]} Answers')
     # checking answer of user with correct name of country
     if message.text.strip() == answers[message.chat.id]:
         bot.reply_to(message, 'You are damn right!')
