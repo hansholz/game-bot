@@ -52,9 +52,9 @@ def checking(message):
         send_welcome(message)
     else:
         if message.text.strip().lower() == answers[message.chat.id].lower():
-            bot.reply_to(message, f'You are damn right!, Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id]}')
+            bot.reply_to(message, f'You are damn right!, Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "+")}')
         else:
-            bot.reply_to(message, f'Try again! Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id]}')
+            bot.reply_to(message, f'Try again! Its {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
         return
 
 
