@@ -14,7 +14,7 @@ conn = sqlite3.connect('example.db')
 answers = {}
 
 
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
     # sending a picture of country
     flag = random.choice(os.listdir("flags/"))
