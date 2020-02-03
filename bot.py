@@ -20,7 +20,7 @@ def send_welcome(message: Message):
     flag = random.choice(os.listdir("flags/"))
     answers[message.chat.id] = search_name_of_country(flag)
     photo = open('flags/'+flag, 'rb')
-    photo = bot.send_photo(message.chat.id, photo, 'What country is this??')
+    photo = bot.send_photo(message.chat.id, photo, 'What country is this?')
     bot.register_next_step_handler(photo, checking)
 
 
@@ -50,9 +50,9 @@ def search_name_of_country(flag):
 def checking(message):
     # checking answer of user with correct name of country
     if message.text.strip() == answers[message.chat.id]:
-        bot.reply_to(message, 'You are damn right!')
+        bot.reply_to(message, f'You are damn right!, Its {answers[message.chat.id]} https://ru.wikipedia.org/wiki/{answers[message.chat.id]}')
     else:
-        bot.reply_to(message, 'Try again!')
+        bot.reply_to(message, f'Try again! Its {answers[message.chat.id]} https://ua.wikipedia.org/wiki/{answers[message.chat.id]}')
     return
 
 
