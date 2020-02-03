@@ -40,7 +40,7 @@ def search_name_of_country(i):
     return name_country
 
 
-@bot.message_handler()
+@bot.message_handler(func=lambda m: True)
 def checking(message, name_country):
     if message.text == name_country:
         print(name_country)
