@@ -6,8 +6,8 @@ from telebot import types
 from telebot import logger
 #import sqlite3
 
-token = "1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k"
-#token = os.getenv("token")
+
+token = os.getenv("token")
 TOKEN = f'{token}'
 
 
@@ -71,7 +71,7 @@ def checking(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.data == "next":
-        bot.send_message(call.message.chat.id, "Хулє клацаєш?")
+        send_welcome(call.message)
     return
 
 
