@@ -3,9 +3,11 @@ import os, random
 from telebot.types import Message
 import linecache
 from telebot import types
+from telebot import logger
 #import sqlite3
 
-token = os.getenv("token")
+token = "1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k"
+#token = os.getenv("token")
 TOKEN = f'{token}'
 
 
@@ -18,14 +20,16 @@ answers = {}
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
     # sending a picture of country
-    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    itembtn1 = types.KeyboardButton('Next')
-    markup.add(itembtn1)
+    key = types.InlineKeyboardMarkup()
+    itembtn1 = types.InlineKeyboardButton(text="Next", callback_data="next")
+    key.add(itembtn1)
     flag = random.choice(os.listdir("flags/"))
     answers[message.chat.id] = search_name_of_country(flag)
     photo = open('flags/'+flag, 'rb')
-    photo = bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=markup)
+    photo = bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=key)
     bot.register_next_step_handler(photo, checking)
+
+    #bot.send_message(message.chat.id, f'{key}')
 
 
 def del_trash(flag):
@@ -64,4 +68,12 @@ def checking(message):
         return
 
 
-bot.polling()
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    if call.data == "next":
+        bot.send_message(call.message.chat.id, "Хулє клацаєш?")
+    return
+
+
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
