@@ -53,10 +53,13 @@ def search_name_of_country(flag):
 
 @bot.message_handler(content_types=['text'])
 def checking(message):
+    key = types.InlineKeyboardMarkup()
+    itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
+    key.add(itembtn)
     if message.text.strip().lower() == answers[message.chat.id].lower():
-        bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+        bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
     else:
-        bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+        bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
     return
 
 
