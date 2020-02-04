@@ -29,8 +29,6 @@ def send_welcome(message: Message):
     photo = bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=key)
     bot.register_next_step_handler(photo, checking)
 
-    #bot.send_message(message.chat.id, f'{key}')
-
 
 def del_trash(flag):
     # deleting a part of string with ".png"
@@ -62,9 +60,9 @@ def checking(message):
         send_welcome(message)
     else:
         if message.text.strip().lower() == answers[message.chat.id].lower():
-            bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+            bot.reply_to(message, f'You are damn right!  It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
         else:
-            bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+            bot.reply_to(message, f'Try again!  It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
         return
 
 
