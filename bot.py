@@ -62,9 +62,9 @@ def checking(message):
         send_welcome(message)
     else:
         if message.text.strip().lower() == answers[message.chat.id].lower():
-            bot.reply_to(message, f'You are damn right!  It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+            bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
         else:
-            bot.reply_to(message, f'Try again!  It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
+            bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}')
         return
 
 
