@@ -21,7 +21,7 @@ answers = {}
 def send_welcome(message: Message):
     # sending a picture of country
     key = types.InlineKeyboardMarkup()
-    itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
+    itembtn = types.InlineKeyboardButton(text="I give up", callback_data="give_up")
     key.add(itembtn)
     flag = random.choice(os.listdir("flags/"))
     answers[message.chat.id] = search_name_of_country(flag)
@@ -67,6 +67,8 @@ def checking(message):
 def callback_inline(call):
     if call.data == "next":
         send_welcome(call.message)
+    elif call.data == "give_up":
+        checking(call.message)
     return
 
 
