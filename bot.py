@@ -2,6 +2,7 @@ import telebot
 import os, random
 from telebot.types import Message
 import linecache
+from telebot import types
 #import sqlite3
 
 
@@ -17,10 +18,13 @@ answers = {}
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
     # sending a picture of country
+    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    itembtn1 = types.KeyboardButton('Next')
+    markup.add(itembtn1)
     flag = random.choice(os.listdir("flags/"))
     answers[message.chat.id] = search_name_of_country(flag)
     photo = open('flags/'+flag, 'rb')
-    photo = bot.send_photo(message.chat.id, photo, 'What country is this?')
+    photo = bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=markup)
     bot.register_next_step_handler(photo, checking)
 
 
@@ -49,6 +53,8 @@ def search_name_of_country(flag):
 @bot.message_handler(content_types=['text'])
 def checking(message):
     if message.text == '/start':
+        send_welcome(message)
+    elif message.text == 'Next':
         send_welcome(message)
     else:
         if message.text.strip().lower() == answers[message.chat.id].lower():
