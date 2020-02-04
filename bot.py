@@ -5,8 +5,8 @@ import linecache
 from telebot import types
 #import sqlite3
 
-
-TOKEN = '1004071626:AAHHFv-_sYW7hu0qnrf827wuMFkHmtTv--k'
+token = os.getenv("token")
+TOKEN = f'{token}'
 
 
 bot = telebot.TeleBot(TOKEN)
