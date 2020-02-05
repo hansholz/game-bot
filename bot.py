@@ -72,12 +72,12 @@ def callback_inline(call):
     return
 
 
-@bot.message_handler()
+@bot.message_handler(content_types=['text'])
 def give_up(message: Message):
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
-    bot.send_message(message.chat.id, f'Pfff... Really? It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+    bot.send_message(message.chat.id, f'Pf... Really? It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
 
 
 if __name__ == '__main__':
