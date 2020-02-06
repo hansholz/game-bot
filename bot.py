@@ -1,8 +1,9 @@
 import telebot
-import os, random
+import threading
 from telebot.types import Message
 import linecache
 from telebot import types
+import sqlite3
 
 
 with open("token.txt") as f:
@@ -22,10 +23,20 @@ def send_welcome(message: Message):
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="I give up", callback_data="give_up")
     key.add(itembtn)
-    flag = random.choice(os.listdir("flags/"))
-    answers[message.chat.id] = search_name_of_country(flag)
-    photo = open('flags/'+flag, 'rb')
+
+    conn = sqlite3.connect('data1.sqlite')
+    c = conn.cursor()
+    c.execute('SELECT * FROM countries ORDER BY RANDOM() LIMIT 1;')
+    conn.commit()
+
+    data = list(c)
+    flag = [item for t in data for item in t]
+    varu = str(flag[1])
+    answers[message.chat.id] = search_name_of_country(varu)
+    photo = open(f'flags/{varu.lower()}.png', 'rb')
     bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=key)
+
+    conn.close()
 
 
 def del_trash(flag):
