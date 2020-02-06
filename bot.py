@@ -55,11 +55,12 @@ def checking(message: Message):
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
-    if message.text.strip().lower() == answers[message.chat.id].lower():
-        bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
-    else:
-        bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
-    return
+    if answers.get(message.chat.id):
+        if message.text.strip().lower() == answers[message.chat.id].lower():
+            bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+        else:
+            bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+        return
 
 
 @bot.callback_query_handler(func=lambda call: True)
