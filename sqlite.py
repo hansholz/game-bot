@@ -6,6 +6,7 @@ c = conn.cursor()
 
 '''c.execute("""CREATE TABLE flags (
             countries text,
+            iso text,
             file text
             )""")'''
 
@@ -14,6 +15,8 @@ with open("list-of-countries.txt") as list:
 
 
 #c.execute(f'INSERT INTO flags VALUES ("Yummy","Bummy","Uuuuu")')
+
+c.execute("SELECT * FROM flags WHERE iso='Bummy'")
 
 print(c.fetchone())
 
