@@ -3,7 +3,6 @@ import os, random
 from telebot.types import Message
 import linecache
 from telebot import types
-#import sqlite3
 
 
 with open("token.txt") as f:
@@ -12,7 +11,7 @@ TOKEN = f'{token}'
 
 
 bot = telebot.TeleBot(TOKEN)
-#conn = sqlite3.connect('example.db')
+
 
 answers = {}
 
@@ -65,6 +64,7 @@ def checking(message: Message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
+    # checking which button have been pressed
     if call.data == "next":
         send_welcome(call.message)
     elif call.data == "give_up":
@@ -74,6 +74,7 @@ def callback_inline(call):
 
 @bot.message_handler(content_types=['text'])
 def give_up(message: Message):
+    # answer, when user give up
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
