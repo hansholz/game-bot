@@ -31,9 +31,8 @@ def send_welcome(message: Message):
 
     data = list(c)
     flag = [item for t in data for item in t]
-    varu = str(flag[1])
-    answers[message.chat.id] = search_name_of_country(varu)
-    photo = open(f'flags/{varu.lower()}.png', 'rb')
+    answers[message.chat.id] = search_name_of_country(str(flag[1]))
+    photo = open(f'flags/{str(flag[1]).lower()}.png', 'rb')
     bot.send_photo(message.chat.id, photo, 'What country is this?', reply_markup=key)
 
     conn.close()
