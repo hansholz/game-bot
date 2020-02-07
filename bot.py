@@ -42,6 +42,7 @@ def send_welcome(message: Message):
     except IOError:
         send_welcome(message)
     conn.close()
+    return
 
 
 @bot.message_handler(commands=['help'])
@@ -49,6 +50,7 @@ def helping(message: Message):
     bot.send_message(message.chat.id, f'List of commands:\n'
                                       f'/start - start a new game\n'
                                       f'/battle - to cause anyone to fight')
+    return
 
 
 @bot.message_handler(commands=['battle'])
@@ -60,6 +62,7 @@ def battle(message: Message):
     key.add(agree)
     bot.send_message(message.chat.id, f'Who wants to battle with {message.from_user.first_name}?', reply_markup=key)
     initiators[message.chat.id] = message.from_user.first_name
+    return
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -75,6 +78,7 @@ def callback_inline(call):
         sheepish(call.message)
     elif call.data == "agree":
         versus(call.message)
+    return
 
 
 @bot.message_handler(content_types=['text'])
@@ -89,18 +93,11 @@ def checking(message: Message):
     else:
         bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/'
                               f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
-    return
-
-
-@bot.message_handler(content_types=['text'])
-def versus(message: Message):
-    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
-                                      f' {initiators[message.chat.id]}')
-
-
-@bot.message_handler(content_types=['text'])
-def sheepish(message: Message):
-    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
+    try:
+        checking_initiator(message)
+        opponents_initiator(message)
+    except KeyError:
+        return
 
 
 @bot.message_handler(content_types=['text'])
@@ -111,6 +108,40 @@ def give_up(message: Message):
     key.add(itembtn)
     bot.send_message(message.chat.id, f'Pff... Really? It is {answers[message.chat.id]} https://wikipedia.org/wiki/'
                                       f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+    return
+
+
+@bot.message_handler(content_types=['text'])
+def sheepish(message: Message):
+    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
+    return
+
+
+@bot.message_handler(content_types=['text'])
+def versus(message: Message):
+    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
+                                      f' {initiators[message.chat.id]}')
+    bot.send_message(message.chat.id, f'Initiator of battle {initiators[message.chat.id]} is first')
+    send_welcome(message)
+    return
+
+
+@bot.message_handler(content_types=['text'])
+def checking_initiator(message: Message):
+    if message.from_user.first_name == initiators[message.chat.id]:
+        if answers[message.chat.id].lower() == message.text.strip().lower():
+            bot.send_message(message.chat.id, '+1')
+    else:
+        return
+
+
+@bot.message_handler(content_types=['text'])
+def opponents_initiator(message: Message):
+    if message.from_user.first_name == opponens[message.chat.id]:
+        if answers[message.chat.id].lower() == message.text.strip().lower():
+            bot.send_message(message.chat.id, '+1')
+    else:
+        return
 
 
 bot.skip_pending = True
