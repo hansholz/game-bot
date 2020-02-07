@@ -4,7 +4,6 @@ from telebot import types
 import sqlite3
 
 
-
 with open("token.txt") as f:
     token = f.read().strip()
 TOKEN = f'{token}'
@@ -14,6 +13,9 @@ bot = telebot.TeleBot(TOKEN)
 
 
 answers = {}
+
+
+initiators = {}
 
 
 @bot.message_handler(commands=['start'])
@@ -39,6 +41,34 @@ def send_welcome(message: Message):
     conn.close()
 
 
+@bot.message_handler(commands=['help'])
+def helping(message: Message):
+    bot.send_message(message.chat.id, f'List of commands:\n'
+                                      f'/start - start a new game\n'
+                                      f'/battle - to cause anyone to fight')
+
+
+@bot.message_handler(commands=['battle'])
+def battle(message: Message):
+    key = types.InlineKeyboardMarkup()
+    loser = types.InlineKeyboardButton(text="I'm sheepish", callback_data="sheepish")
+    agree = types.InlineKeyboardButton(text="Agree", callback_data="agree")
+    key.add(loser)
+    key.add(agree)
+    bot.send_message(message.chat.id, f'Who wants to battle with {message.from_user.first_name}?', reply_markup=key)
+    initiators[message.chat.id] = str(message.from_user.first_name)
+
+
+@bot.message_handler(content_types=['text'])
+def versus(message: Message, call):
+    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {call.from_user.first_name} VS {initiators[message.chat.id]}')
+
+
+@bot.message_handler(content_types=['text'])
+def sheepish(message: Message, call):
+    bot.send_message(message.chat.id, f'This hear everyone? {call.from_user.first_name} is sheepish)')
+
+
 @bot.message_handler(content_types=['text'])
 def checking(message: Message):
     # checking users answer
@@ -59,7 +89,11 @@ def callback_inline(call):
         send_welcome(call.message)
     elif call.data == "give_up":
         give_up(call.message)
-    return
+    elif call.data == "sheepish":
+        sheepish(call.message, call)
+    elif call.data == "agree":
+        versus(call.message, call)
+    return call
 
 
 @bot.message_handler(content_types=['text'])
