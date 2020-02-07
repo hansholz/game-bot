@@ -18,6 +18,9 @@ answers = {}
 initiators = {}
 
 
+opponens = {}
+
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
     # sending a picture of country
@@ -56,17 +59,18 @@ def battle(message: Message):
     key.add(loser)
     key.add(agree)
     bot.send_message(message.chat.id, f'Who wants to battle with {message.from_user.first_name}?', reply_markup=key)
-    initiators[message.chat.id] = str(message.from_user.first_name)
+    initiators[message.chat.id] = message.from_user.first_name
 
 
 @bot.message_handler(content_types=['text'])
-def versus(message: Message, call):
-    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {call.from_user.first_name} VS {initiators[message.chat.id]}')
+def versus(message: Message):
+    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
+                                      f' {initiators[message.chat.id]}')
 
 
 @bot.message_handler(content_types=['text'])
-def sheepish(message: Message, call):
-    bot.send_message(message.chat.id, f'This hear everyone? {call.from_user.first_name} is sheepish)')
+def sheepish(message: Message):
+    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
 
 
 @bot.message_handler(content_types=['text'])
@@ -76,24 +80,27 @@ def checking(message: Message):
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
     if message.text.strip().lower() == answers[message.chat.id].lower():
-        bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+        bot.reply_to(message, f'You are damn right! It is {answers[message.chat.id]} https://wikipedia.org/wiki/'
+                              f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
     else:
-        bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+        bot.reply_to(message, f'Try again! It is {answers[message.chat.id]} https://wikipedia.org/wiki/'
+                              f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
     return
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     # checking which button have been pressed
+    opponens[call.message.chat.id] = call.from_user.first_name
+
     if call.data == "next":
         send_welcome(call.message)
     elif call.data == "give_up":
         give_up(call.message)
     elif call.data == "sheepish":
-        sheepish(call.message, call)
+        sheepish(call.message)
     elif call.data == "agree":
-        versus(call.message, call)
-    return call
+        versus(call.message)
 
 
 @bot.message_handler(content_types=['text'])
@@ -102,8 +109,9 @@ def give_up(message: Message):
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
-    bot.send_message(message.chat.id, f'Pff... Really? It is {answers[message.chat.id]} https://wikipedia.org/wiki/{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
+    bot.send_message(message.chat.id, f'Pff... Really? It is {answers[message.chat.id]} https://wikipedia.org/wiki/'
+                                      f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
 
 
-if __name__ == '__main__':
-    bot.polling(none_stop=True)
+bot.skip_pending = True
+bot.polling(none_stop=True, interval=0)
