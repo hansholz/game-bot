@@ -41,6 +41,7 @@ def send_welcome(message: Message):
 
 @bot.message_handler(content_types=['text'])
 def checking(message: Message):
+    # checking users answer
     key = types.InlineKeyboardMarkup()
     itembtn = types.InlineKeyboardButton(text="Next", callback_data="next")
     key.add(itembtn)
