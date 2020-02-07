@@ -62,15 +62,19 @@ def battle(message: Message):
     initiators[message.chat.id] = message.from_user.first_name
 
 
-@bot.message_handler(content_types=['text'])
-def versus(message: Message):
-    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
-                                      f' {initiators[message.chat.id]}')
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    # checking which button have been pressed
+    opponens[call.message.chat.id] = call.from_user.first_name
 
-
-@bot.message_handler(content_types=['text'])
-def sheepish(message: Message):
-    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
+    if call.data == "next":
+        send_welcome(call.message)
+    elif call.data == "give_up":
+        give_up(call.message)
+    elif call.data == "sheepish":
+        sheepish(call.message)
+    elif call.data == "agree":
+        versus(call.message)
 
 
 @bot.message_handler(content_types=['text'])
@@ -88,19 +92,15 @@ def checking(message: Message):
     return
 
 
-@bot.callback_query_handler(func=lambda call: True)
-def callback_inline(call):
-    # checking which button have been pressed
-    opponens[call.message.chat.id] = call.from_user.first_name
+@bot.message_handler(content_types=['text'])
+def versus(message: Message):
+    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
+                                      f' {initiators[message.chat.id]}')
 
-    if call.data == "next":
-        send_welcome(call.message)
-    elif call.data == "give_up":
-        give_up(call.message)
-    elif call.data == "sheepish":
-        sheepish(call.message)
-    elif call.data == "agree":
-        versus(call.message)
+
+@bot.message_handler(content_types=['text'])
+def sheepish(message: Message):
+    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
 
 
 @bot.message_handler(content_types=['text'])
