@@ -21,6 +21,14 @@ initiators = {}
 opponens = {}
 
 
+initiators_coins = {}
+initiators_coins[0] = 0
+
+
+opponents_coins = {}
+opponents_coins[0] = 0
+
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
     # sending a picture of country
@@ -95,7 +103,7 @@ def checking(message: Message):
                               f'{answers[message.chat.id].replace(" ", "_")}', reply_markup=key)
     try:
         checking_initiator(message)
-        opponents_initiator(message)
+        checking_opponents(message)
     except KeyError:
         return
 
@@ -130,16 +138,22 @@ def versus(message: Message):
 def checking_initiator(message: Message):
     if message.from_user.first_name == initiators[message.chat.id]:
         if answers[message.chat.id].lower() == message.text.strip().lower():
-            bot.send_message(message.chat.id, '+1')
+            i = initiators_coins[0]
+            i += 1
+            bot.send_message(message.chat.id, f'{initiators[message.chat.id]} have {i} points')
+            initiators_coins[0] = i
     else:
         return
 
 
 @bot.message_handler(content_types=['text'])
-def opponents_initiator(message: Message):
+def checking_opponents(message: Message):
     if message.from_user.first_name == opponens[message.chat.id]:
         if answers[message.chat.id].lower() == message.text.strip().lower():
-            bot.send_message(message.chat.id, '+1')
+            i = opponents_coins[0]
+            i += 1
+            bot.send_message(message.chat.id, f'{opponens[message.chat.id]} have {i} points')
+            initiators_coins[0] = i
     else:
         return
 
