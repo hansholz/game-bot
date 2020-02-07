@@ -153,7 +153,7 @@ def checking_opponents(message: Message):
             i = opponents_coins[0]
             i += 1
             bot.send_message(message.chat.id, f'{opponens[message.chat.id]} have {i} points')
-            initiators_coins[0] = i
+            opponents_coins[0] = i
     else:
         return
 
