@@ -1,8 +1,8 @@
 import telebot
 from telebot.types import Message
-import linecache
 from telebot import types
 import sqlite3
+
 
 
 with open("token.txt") as f:
@@ -14,6 +14,7 @@ bot = telebot.TeleBot(TOKEN)
 
 
 answers = {}
+
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
@@ -30,9 +31,11 @@ def send_welcome(message: Message):
     data = list(c)
     flag = [item for t in data for item in t]
     answers[message.chat.id] = str(flag[0])
-    photo = open(f'flags/{str(flag[1]).lower()}.png', 'rb')
-    bot.send_photo(message.chat.id, photo, f'What country is this? ', reply_markup=key)
-
+    try:
+        with open(f'flags/{str(flag[1]).lower()}.png', 'rb') as image:
+            bot.send_photo(message.chat.id, image, f'What country is this? ', reply_markup=key)
+    except IOError:
+        send_welcome(message)
     conn.close()
 
 
