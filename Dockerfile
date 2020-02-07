@@ -4,7 +4,7 @@ WORKDIR /bot
 
 COPY . /bot
 
-RUN apk update && pip install --upgrade -r requirements.txt
+RUN apk update && pip install -r requirements.txt
 
 ENTRYPOINT ["python"]
 
