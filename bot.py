@@ -18,7 +18,7 @@ answers = {}
 initiators = {}
 
 
-opponens = {}
+opponents = {}
 
 
 initiators_coins = {}
@@ -76,8 +76,6 @@ def battle(message: Message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     # checking which button have been pressed
-    opponens[call.message.chat.id] = call.from_user.first_name
-
     if call.data == "next":
         send_welcome(call.message)
     elif call.data == "give_up":
@@ -85,6 +83,7 @@ def callback_inline(call):
     elif call.data == "sheepish":
         sheepish(call.message)
     elif call.data == "agree":
+        opponents[call.message.chat.id] = call.from_user.first_name
         versus(call.message)
     return
 
@@ -121,16 +120,19 @@ def give_up(message: Message):
 
 @bot.message_handler(content_types=['text'])
 def sheepish(message: Message):
-    bot.send_message(message.chat.id, f'This hear everyone? {opponens[message.chat.id]} is sheepish)')
+    bot.send_message(message.chat.id, f'This hear everyone? {opponents[message.chat.id]} is sheepish)')
     return
 
 
 @bot.message_handler(content_types=['text'])
 def versus(message: Message):
-    bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponens[message.chat.id]} VS'
+    if opponents[message.chat.id] == initiators[message.chat.id]:
+        bot.send_message(message.chat.id, f'{initiators[message.chat.id]} wants to fight the shadow')
+    else:
+        bot.send_message(message.chat.id, f'Lady and guys, tonight fight: {opponents[message.chat.id]} VS'
                                       f' {initiators[message.chat.id]}')
-    bot.send_message(message.chat.id, f'Initiator of battle {initiators[message.chat.id]} is first')
-    send_welcome(message)
+        bot.send_message(message.chat.id, f'Initiator of battle {initiators[message.chat.id]} is first')
+        send_welcome(message)
     return
 
 
@@ -140,22 +142,36 @@ def checking_initiator(message: Message):
         if answers[message.chat.id].lower() == message.text.strip().lower():
             i = initiators_coins[0]
             i += 1
-            bot.send_message(message.chat.id, f'{initiators[message.chat.id]} have {i} points')
-            initiators_coins[0] = i
+            if i == 10:
+                bot.send_message(message.chat.id, f'{initiators[message.chat.id]} won this battle!!! He have {i} points')
+                initiators_coins[0] = 0
+                opponents_coins[0] = 0
+                initiators[message.chat.id] = ''
+                opponents[message.chat.id] = ''
+            else:
+                bot.send_message(message.chat.id, f'{initiators[message.chat.id]} have {i} points')
+                initiators_coins[0] = i
     else:
         return
 
 
 @bot.message_handler(content_types=['text'])
 def checking_opponents(message: Message):
-    if message.from_user.first_name == opponens[message.chat.id]:
+    if message.from_user.first_name == opponents[message.chat.id]:
         if answers[message.chat.id].lower() == message.text.strip().lower():
-            i = opponents_coins[0]
-            i += 1
-            bot.send_message(message.chat.id, f'{opponens[message.chat.id]} have {i} points')
-            initiators_coins[0] = i
-    else:
-        return
+            k = opponents_coins[0]
+            k += 1
+            if k == 10:
+                bot.send_message(message.chat.id, f'{opponents[message.chat.id]} won this battle!!! He have {k} points')
+                opponents_coins[0] = 0
+                initiators_coins[0] = 0
+                initiators[message.chat.id] = ''
+                opponents[message.chat.id] = ''
+            else:
+                bot.send_message(message.chat.id, f'{opponents[message.chat.id]} have {k} points')
+                opponents_coins[0] = k
+        else:
+            return
 
 
 bot.skip_pending = True
