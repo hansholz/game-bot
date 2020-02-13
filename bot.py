@@ -81,6 +81,7 @@ def callback_inline(call):
     elif call.data == "give_up":
         give_up(call.message)
     elif call.data == "sheepish":
+        opponents[call.message.chat.id] = call.from_user.first_name
         sheepish(call.message)
     elif call.data == "agree":
         opponents[call.message.chat.id] = call.from_user.first_name
