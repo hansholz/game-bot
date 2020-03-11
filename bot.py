@@ -46,7 +46,7 @@ def send_welcome(message: Message):
     answers[message.chat.id] = str(flag[0])
     try:
         with open(f'flags/{str(flag[1]).lower()}.png', 'rb') as image:
-            bot.send_photo(message.chat.id, image, f'What country is this? 1', reply_markup=key)
+            bot.send_photo(message.chat.id, image, f'What country is this? ', reply_markup=key)
     except IOError:
         send_welcome(message)
     conn.close()
