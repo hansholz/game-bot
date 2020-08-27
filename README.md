@@ -1,9 +1,4 @@
-This amateur project help me to improve my practice skills in Python. 
-For creating Telegram bot I used Python v.3.8 and library pyTelegramBotAPI. 
-Also, for continuous operation of the bot I deploy it to remote server. For creating and
-testing new functions I used Test-Bot which I launch locally. When new functions
-have been tested and all bugs have been fixed, I deploy a stable version of bot with
-help my CI/CD to remote server.
+This is own training project, which I developed for improve my practice skills in Python and MySQL-database. Also for this project I created CI/CD with using Jenkins and Docker.  
 <h2>Experience on this project</h2>
 <img src="https://github.com/hansholz/game-bot/blob/master/readmeimg/technologies.jpeg?raw=true" alt="Experience on this project" width="400">
 <ul>
